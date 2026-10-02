@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef PROJECT2_MPI_CYCLIC
+#define PROJECT2_MPI_MODE "MPI ciclico"
+#else
+#define PROJECT2_MPI_MODE "MPI naive"
+#endif
+
 typedef struct {
     const char *input_path;
     const char *phrase;
@@ -61,6 +67,7 @@ static bool parse_arguments(int argc, char **argv, Options *options) {
            options->check_interval > 0U;
 }
 
+#ifndef PROJECT2_MPI_CYCLIC
 static void partition_range(
     uint64_t total,
     int rank,
@@ -78,6 +85,7 @@ static void partition_range(
     *start = quotient * rank_u64 + prefix_extra;
     *end = *start + local_count;
 }
+#endif
 
 int main(int argc, char **argv) {
     int rank;
@@ -92,6 +100,7 @@ int main(int argc, char **argv) {
     uint64_t config[2] = {0, 0};
     uint64_t start_key = 0;
     uint64_t end_key = 0;
+    uint64_t key_stride = 1;
     uint64_t next_key;
     uint64_t local_attempts = 0;
     uint64_t total_attempts = 0;
@@ -183,7 +192,13 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
+#ifdef PROJECT2_MPI_CYCLIC
+    start_key = (uint64_t)rank;
+    end_key = config[0];
+    key_stride = (uint64_t)process_count;
+#else
     partition_range(config[0], rank, process_count, &start_key, &end_key);
+#endif
     next_key = start_key;
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -220,7 +235,7 @@ int main(int argc, char **argv) {
                 local_key = next_key;
                 break;
             }
-            ++next_key;
+            next_key += key_stride;
         }
 
         MPI_Allreduce(
@@ -284,10 +299,11 @@ int main(int argc, char **argv) {
 
     if (rank == 0) {
         printf(
-            "Modo: MPI naive\nProcesos: %d\nArchivo: %s\n"
+            "Modo: %s\nProcesos: %d\nArchivo: %s\n"
             "Frase conocida: %s\nRango global: [0, %" PRIu64 ")\n"
             "Intervalo de sincronizacion: %" PRIu64
             "\nIntentos totales: %" PRIu64 "\nTiempo: %.6f s\n",
+            PROJECT2_MPI_MODE,
             process_count,
             options.input_path,
             options.phrase,
@@ -336,4 +352,3 @@ int main(int argc, char **argv) {
     MPI_Finalize();
     return valid && global_key != UINT64_MAX ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
