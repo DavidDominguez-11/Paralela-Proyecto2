@@ -64,6 +64,19 @@ Prueba automatizada del núcleo:
 make test
 ```
 
+Suite completa del núcleo, aplicaciones de línea de comandos y MPI:
+
+```bash
+make test-all
+```
+
+También pueden ejecutarse por separado las pruebas de integración:
+
+```bash
+make test-cli
+make test-mpi
+```
+
 Demostración secuencial completa:
 
 ```bash
@@ -122,4 +135,3 @@ mpirun -np 4 ./bin/bruteforce_mpi \
 - [Informe del avance](docs/AVANCE.md)
 - [Matriz de trazabilidad](docs/TRAZABILIDAD.md)
 - [Propuesta de mejora](docs/propuesta-mejora-fase0.md)
-

@@ -17,8 +17,8 @@ Esta matriz relaciona los requisitos del enunciado con la implementación, su ve
 | R11 | Medir tiempo | Reloj monotónico y `MPI_Wtime` | Salida `Tiempo` | Cumplido inicialmente |
 | R12 | Medir con distintas llaves | Infraestructura por argumentos | Campaña de pruebas | Pendiente |
 | R13 | Calcular speedup | No implementado todavía | Tabla comparativa futura | Pendiente |
-| R14 | Manejo adecuado de memoria | Liberación centralizada por aplicación | Pruebas y revisión | Cumplido en rutas probadas |
-| R15 | Programación defensiva | Validación de rangos, archivos y tamaños | Casos de prueba y códigos de salida | Parcial; ampliar pruebas |
+| R14 | Manejo adecuado de memoria | Liberación centralizada por aplicación | `make test-all` y revisión con sanitizadores | Cumplido en rutas probadas |
+| R15 | Programación defensiva | Validación de rangos, archivos, padding y tamaños | `make test-all` | Cumplido en la base actual |
 | R16 | README de ejecución | `README.md` | Repetición desde entorno limpio | Cumplido |
 | R17 | Bitácora de pruebas | Resultados iniciales en `AVANCE.md` | Evidencia futura | Parcial |
 | R18 | Explicación de primitivas MPI | Informe final | Revisión documental | Pendiente |
@@ -32,4 +32,3 @@ Esta matriz relaciona los requisitos del enunciado con la implementación, su ve
 - Un requisito solo se marca como cumplido cuando existe evidencia reproducible.
 - Los resultados de rendimiento deben incluir entrada, llave, procesos, versión del programa y parámetros.
 - Los archivos generados en `build/` y `bin/` no se consideran evidencia durable; los comandos y resultados relevantes deben registrarse en `docs/` o en la futura bitácora.
-
