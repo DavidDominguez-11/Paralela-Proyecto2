@@ -8,7 +8,7 @@ Esta matriz relaciona los requisitos del enunciado con la implementación, su ve
 | R02 | Uso de Open MPI | `apps/bruteforce_mpi.c` | `make mpi`, `make demo-mpi` | Cumplido: naive |
 | R03 | Versión secuencial | `apps/bruteforce_seq.c` | `make demo` | Cumplido |
 | R04 | Acercamiento naive | Partición contigua en `bruteforce_mpi.c` | Ejecución con `-np 4` | Cumplido |
-| R05 | Dos acercamientos alternativos | Diseño en `propuesta-mejora-fase0.md` | Pendiente | No iniciado |
+| R05 | Dos acercamientos alternativos | Cíclico implementado; master-worker diseñado | `make test-mpi` | Parcial: 1 de 2 |
 | R06 | Texto cargado desde `.txt` | `src/file_io.c`, `des_tool` | `data/mensaje.txt` | Cumplido |
 | R07 | Llave como parámetro | Opción `--key` de `des_tool` | `make demo` | Cumplido |
 | R08 | Cifrado y descifrado | `src/des_crypto.c` | `tests/test_core.c`, comparación `cmp` | Cumplido |

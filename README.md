@@ -1,6 +1,6 @@
 # Proyecto 2 — Computación Paralela y Distribuida
 
-Implementación modular de una búsqueda de llaves DES por fuerza bruta. El avance actual incluye cifrado y descifrado de archivos, búsqueda secuencial y una primera búsqueda paralela naive con Open MPI.
+Implementación modular de una búsqueda de llaves DES por fuerza bruta. El avance actual incluye cifrado y descifrado de archivos, búsqueda secuencial y búsquedas paralelas naive y cíclica con Open MPI.
 
 DES se utiliza porque es un requisito académico del proyecto. No debe utilizarse para proteger información real.
 
@@ -10,8 +10,8 @@ DES se utiliza porque es un requisito académico del proyecto. No debe utilizars
 - Padding PKCS#7 y manejo binario de longitudes: funcional.
 - Búsqueda secuencial por rango: funcional.
 - Búsqueda MPI naive con bloques contiguos: funcional.
+- Búsqueda MPI con distribución cíclica: funcional.
 - Prueba automatizada del núcleo: funcional.
-- Distribución cíclica: pendiente para la siguiente fase.
 - Distribución dinámica master-worker: pendiente para la siguiente fase.
 - Campaña completa de mediciones y speedup: pendiente.
 
@@ -24,7 +24,7 @@ include/project2/       Interfaces públicas
 src/                    Implementación reutilizable
 apps/des_tool.c         Cifrado y descifrado de archivos
 apps/bruteforce_seq.c   Búsqueda secuencial
-apps/bruteforce_mpi.c   Búsqueda MPI naive
+apps/bruteforce_mpi.c   Búsquedas MPI naive y cíclica
 tests/test_core.c       Pruebas del núcleo
 data/mensaje.txt        Entrada reproducible de demostración
 docs/                   Enunciado, decisiones y trazabilidad
@@ -54,6 +54,7 @@ Los ejecutables se generan en `bin/`:
 - `des_tool`
 - `bruteforce_seq`
 - `bruteforce_mpi`
+- `bruteforce_mpi_cyclic`
 - `test_core`, después de ejecutar `make test`
 
 ## Pruebas
@@ -122,6 +123,16 @@ Buscarla con cuatro procesos MPI:
 
 ```bash
 mpirun -np 4 ./bin/bruteforce_mpi \
+  --input build/mensaje.des \
+  --phrase "es una prueba de" \
+  --max-key 1000 \
+  --check-interval 16
+```
+
+Buscarla con distribución cíclica:
+
+```bash
+mpirun -np 4 ./bin/bruteforce_mpi_cyclic \
   --input build/mensaje.des \
   --phrase "es una prueba de" \
   --max-key 1000 \
