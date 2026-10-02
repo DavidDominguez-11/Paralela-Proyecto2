@@ -7,6 +7,7 @@
 
 #define PROJECT2_DES_KEYSPACE (UINT64_C(1) << 56)
 #define PROJECT2_DEFAULT_CHECK_INTERVAL UINT64_C(4096)
+#define PROJECT2_DEFAULT_CHUNK_SIZE UINT64_C(4096)
 
 typedef enum {
     PROJECT2_OK = 0,
@@ -22,4 +23,3 @@ bool project2_parse_u64(const char *text, uint64_t *value);
 double project2_monotonic_seconds(void);
 
 #endif
-
