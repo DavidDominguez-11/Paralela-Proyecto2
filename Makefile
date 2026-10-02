@@ -7,6 +7,7 @@ LDLIBS := -lcrypto
 
 COMMON_SOURCES := src/common.c src/file_io.c src/des_crypto.c src/search.c
 COMMON_OBJECTS := $(COMMON_SOURCES:src/%.c=build/%.o)
+PUBLIC_HEADERS := $(wildcard include/project2/*.h)
 
 .PHONY: all core mpi test demo demo-mpi clean
 
@@ -16,19 +17,19 @@ core: bin/des_tool bin/bruteforce_seq
 
 mpi: bin/bruteforce_mpi
 
-bin/des_tool: apps/des_tool.c $(COMMON_OBJECTS) | bin
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDLIBS)
+bin/des_tool: apps/des_tool.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
+	$(CC) $(CPPFLAGS) $(CFLAGS) apps/des_tool.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
-bin/bruteforce_seq: apps/bruteforce_seq.c $(COMMON_OBJECTS) | bin
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDLIBS)
+bin/bruteforce_seq: apps/bruteforce_seq.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
+	$(CC) $(CPPFLAGS) $(CFLAGS) apps/bruteforce_seq.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
-bin/bruteforce_mpi: apps/bruteforce_mpi.c $(COMMON_OBJECTS) | bin
-	$(MPICC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDLIBS)
+bin/bruteforce_mpi: apps/bruteforce_mpi.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
+	$(MPICC) $(CPPFLAGS) $(CFLAGS) apps/bruteforce_mpi.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
-bin/test_core: tests/test_core.c $(COMMON_OBJECTS) | bin
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDLIBS)
+bin/test_core: tests/test_core.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_core.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
-build/%.o: src/%.c | build
+build/%.o: src/%.c $(PUBLIC_HEADERS) | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 build bin:

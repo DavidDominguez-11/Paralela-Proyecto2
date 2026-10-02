@@ -17,6 +17,12 @@ int main(void) {
     Project2SearchResult result;
     Project2Status status;
     bool matches = false;
+    uint64_t parsed_value = 0;
+
+    assert(project2_parse_u64("42", &parsed_value));
+    assert(parsed_value == 42U);
+    assert(!project2_parse_u64("-1", &parsed_value));
+    assert(!project2_parse_u64(" -1", &parsed_value));
 
     status = project2_des_encrypt(
         expected_key,
@@ -99,4 +105,3 @@ int main(void) {
     puts("OK: cifrado, descifrado, validacion y busqueda secuencial.");
     return EXIT_SUCCESS;
 }
-

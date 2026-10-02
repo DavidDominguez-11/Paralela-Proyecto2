@@ -12,6 +12,7 @@ Project2Status project2_read_file(
     long file_length;
     unsigned char *buffer;
     size_t bytes_read;
+    int close_status;
 
     if (path == NULL || data == NULL || length == NULL) {
         return PROJECT2_ERR_ARGUMENT;
@@ -42,7 +43,8 @@ Project2Status project2_read_file(
     }
 
     bytes_read = fread(buffer, 1, (size_t)file_length, file);
-    if (bytes_read != (size_t)file_length || fclose(file) != 0) {
+    close_status = fclose(file);
+    if (bytes_read != (size_t)file_length || close_status != 0) {
         free(buffer);
         return PROJECT2_ERR_IO;
     }
@@ -60,6 +62,7 @@ Project2Status project2_write_file(
 ) {
     FILE *file;
     size_t bytes_written;
+    int close_status;
 
     if (path == NULL || (data == NULL && length != 0U)) {
         return PROJECT2_ERR_ARGUMENT;
@@ -71,10 +74,10 @@ Project2Status project2_write_file(
     }
 
     bytes_written = fwrite(data, 1, length, file);
-    if (bytes_written != length || fclose(file) != 0) {
+    close_status = fclose(file);
+    if (bytes_written != length || close_status != 0) {
         return PROJECT2_ERR_IO;
     }
 
     return PROJECT2_OK;
 }
-

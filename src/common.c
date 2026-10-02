@@ -2,6 +2,7 @@
 
 #include "project2/common.h"
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <time.h>
@@ -27,9 +28,18 @@ const char *project2_status_message(Project2Status status) {
 
 bool project2_parse_u64(const char *text, uint64_t *value) {
     char *end = NULL;
+    const unsigned char *cursor;
     unsigned long long parsed;
 
-    if (text == NULL || value == NULL || *text == '\0' || *text == '-') {
+    if (text == NULL || value == NULL || *text == '\0') {
+        return false;
+    }
+
+    cursor = (const unsigned char *)text;
+    while (isspace(*cursor)) {
+        ++cursor;
+    }
+    if (*cursor == '-') {
         return false;
     }
 
@@ -52,4 +62,3 @@ double project2_monotonic_seconds(void) {
 
     return (double)now.tv_sec + (double)now.tv_nsec / 1000000000.0;
 }
-
