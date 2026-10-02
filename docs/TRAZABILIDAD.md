@@ -15,12 +15,12 @@ Esta matriz relaciona los requisitos del enunciado con la implementación, su ve
 | R09 | Frase clave configurable | Opción `--phrase` | Demostraciones secuencial y MPI | Cumplido |
 | R10 | Mostrar llave, archivo y frase | Salida de las aplicaciones de búsqueda | Inspección de `make demo-mpi` | Cumplido |
 | R11 | Medir tiempo | Reloj monotónico y `MPI_Wtime` | Salida `Tiempo` | Cumplido inicialmente |
-| R12 | Medir con distintas llaves | Infraestructura por argumentos | Campaña de pruebas | Pendiente |
-| R13 | Calcular speedup | No implementado todavía | Tabla comparativa futura | Pendiente |
+| R12 | Medir con distintas llaves | `scripts/benchmark.py` | `make test-benchmark` | Infraestructura cumplida; campaña final pendiente |
+| R13 | Calcular speedup | Resumen CSV por llave y estrategia | `summary.csv` | Cumplido |
 | R14 | Manejo adecuado de memoria | Liberación centralizada por aplicación | `make test-all` y revisión con sanitizadores | Cumplido en rutas probadas |
 | R15 | Programación defensiva | Validación de rangos, archivos, padding y tamaños | `make test-all` | Cumplido en la base actual |
 | R16 | README de ejecución | `README.md` | Repetición desde entorno limpio | Cumplido |
-| R17 | Bitácora de pruebas | Resultados iniciales en `AVANCE.md` | Evidencia futura | Parcial |
+| R17 | Bitácora de pruebas | `raw.csv` y `summary.csv` | `make test-benchmark` | Cumplido técnicamente |
 | R18 | Explicación de primitivas MPI | Informe final | Revisión documental | Pendiente |
 | R19 | Catálogo de funciones | Encabezados públicos; anexo futuro | Revisión documental | Parcial |
 | R20 | Capturas de evidencia | No se almacenan todavía | Anexo del informe | Pendiente |

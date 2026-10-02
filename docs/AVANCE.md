@@ -80,6 +80,7 @@ Resultado esperado:
 OK: parser, archivos, DES, padding y busqueda secuencial.
 OK: comandos, llaves limite y resultados de error.
 OK: naive, ciclico, master-worker y errores MPI.
+OK: CSV crudo, resumen, speedup y eficiencia.
 ```
 
 La demostración completa se ejecuta con:
@@ -129,6 +130,6 @@ Estos tiempos no constituyen todavía un benchmark. La entrada es deliberadament
 
 ## 6. Próxima fase
 
-1. Agregar una bitácora automatizada en CSV para cada ejecución.
-2. Ejecutar repeticiones controladas y calcular mediana, speedup y eficiencia.
-3. Incorporar las llaves fáciles, medianas y difíciles del enunciado con rangos de prueba viables y claramente documentados.
+1. Ejecutar la campaña definitiva con repeticiones controladas.
+2. Incorporar las llaves fáciles, medianas y difíciles del enunciado con rangos de prueba viables y claramente documentados.
+3. Analizar los CSV y trasladar las tablas y conclusiones al informe final.

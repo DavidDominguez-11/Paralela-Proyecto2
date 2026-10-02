@@ -27,6 +27,7 @@ apps/bruteforce_seq.c   Búsqueda secuencial
 apps/bruteforce_mpi.c           Búsquedas MPI naive y cíclica
 apps/bruteforce_mpi_dynamic.c   Búsqueda dinámica master-worker
 tests/test_core.c       Pruebas del núcleo
+scripts/benchmark.py    Campaña reproducible y resumen estadístico
 data/mensaje.txt        Entrada reproducible de demostración
 docs/                   Enunciado, decisiones y trazabilidad
 ```
@@ -78,7 +79,37 @@ También pueden ejecutarse por separado las pruebas de integración:
 ```bash
 make test-cli
 make test-mpi
+make test-benchmark
 ```
+
+## Mediciones y speedup
+
+La campaña predeterminada se ejecuta con:
+
+```bash
+make benchmark
+```
+
+Una campaña personalizada puede indicar llaves, rango, procesos, repeticiones y parámetros de sincronización:
+
+```bash
+python3 scripts/benchmark.py \
+  --keys 1000,10000,50000 \
+  --max-key 100000 \
+  --processes 2,4 \
+  --repetitions 5 \
+  --warmups 1 \
+  --check-interval 4096 \
+  --chunk-size 4096 \
+  --output-dir build/benchmarks
+```
+
+La herramienta valida cada llave recuperada y produce:
+
+- `raw.csv`: una fila por ejecución, con metadatos, intentos y tiempo.
+- `summary.csv`: mediana, mínimo, máximo, speedup y eficiencia por estrategia.
+
+El speedup se calcula contra la mediana secuencial de la misma llave. `efficiency_total` divide entre todos los procesos MPI; `efficiency_workers` divide entre los procesos que efectivamente buscan, útil para interpretar master-worker.
 
 Demostración secuencial completa:
 
