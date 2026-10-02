@@ -193,6 +193,7 @@ En master-worker, `--chunk-size` controla cuántas llaves recibe un worker por s
 
 ## Documentación del avance
 
+- [Informe final](papers/INFORME_FINAL.md)
 - [Informe del avance](docs/AVANCE.md)
 - [Campaña experimental](docs/CAMPANA.md)
 - [Matriz de trazabilidad](docs/TRAZABILIDAD.md)

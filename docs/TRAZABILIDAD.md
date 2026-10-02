@@ -21,8 +21,8 @@ Esta matriz relaciona los requisitos del enunciado con la implementación, su ve
 | R15 | Programación defensiva | Validación de rangos, archivos, padding y tamaños | `make test-all` | Cumplido en la base actual |
 | R16 | README de ejecución | `README.md` | Repetición desde entorno limpio | Cumplido |
 | R17 | Bitácora de pruebas | `results/final-campaign/raw.csv` y `summary.csv` | 105 ejecuciones medidas | Cumplido |
-| R18 | Explicación de primitivas MPI | Informe final | Revisión documental | Pendiente |
-| R19 | Catálogo de funciones | Encabezados públicos; anexo futuro | Revisión documental | Parcial |
+| R18 | Explicación de primitivas MPI | Anexo B de `papers/INFORME_FINAL.md` | Revisión documental | Cumplido |
+| R19 | Catálogo de funciones | Anexo A de `papers/INFORME_FINAL.md` | Revisión documental | Cumplido |
 | R20 | Capturas de evidencia | No se almacenan todavía | Anexo del informe | Pendiente |
 
 ## Convenciones para mantener la trazabilidad

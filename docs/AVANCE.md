@@ -130,8 +130,8 @@ Estos tiempos no constituyen todavía un benchmark. La entrada es deliberadament
 
 ## 6. Próxima fase
 
-La campaña definitiva ya se encuentra en `results/final-campaign/` y su análisis en `docs/CAMPANA.md`. La siguiente fase consiste en:
+La campaña definitiva se encuentra en `results/final-campaign/`, su análisis en `docs/CAMPANA.md` y el borrador integral en `papers/INFORME_FINAL.md`. La siguiente fase consiste en:
 
-1. Trasladar las tablas y conclusiones al informe final con el formato UVG.
-2. Completar el catálogo de funciones y la explicación de primitivas MPI.
-3. Incorporar diagramas y capturas de evidencia.
+1. Sustituir los marcadores de integrantes y carnés.
+2. Incorporar las capturas de evidencia.
+3. Aplicar el formato visual final requerido por la guía UVG y exportar a PDF.
