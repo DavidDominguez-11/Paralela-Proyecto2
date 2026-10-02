@@ -44,7 +44,36 @@ mpirun -np 3 ./bin/bruteforce_mpi \
     --check-interval 4 >"$test_dir/interval4.log"
 grep -q "Llave: 5" "$test_dir/interval4.log"
 
+mpirun -np 4 ./bin/bruteforce_mpi_cyclic \
+    --input "$test_dir/key0.des" \
+    --phrase "es una prueba de" \
+    --max-key 2 \
+    --check-interval 1 >"$test_dir/cyclic-more-processes.log"
+grep -q "Modo: MPI ciclico" "$test_dir/cyclic-more-processes.log"
+grep -q "Llave: 0" "$test_dir/cyclic-more-processes.log"
+
+mpirun -np 3 ./bin/bruteforce_mpi_cyclic \
+    --input "$test_dir/key5.des" \
+    --phrase "es una prueba de" \
+    --max-key 10 \
+    --check-interval 1 >"$test_dir/cyclic-remainder.log"
+grep -q "Llave: 5" "$test_dir/cyclic-remainder.log"
+
+mpirun -np 3 ./bin/bruteforce_mpi_cyclic \
+    --input "$test_dir/key5.des" \
+    --phrase "es una prueba de" \
+    --max-key 10 \
+    --check-interval 4 >"$test_dir/cyclic-interval4.log"
+grep -q "Llave: 5" "$test_dir/cyclic-interval4.log"
+
 expect_failure mpirun -np 3 ./bin/bruteforce_mpi \
+    --input "$test_dir/key5.des" \
+    --phrase "esta frase definitivamente no aparece" \
+    --max-key 10 \
+    --check-interval 2
+grep -q "llave no encontrada" "$test_dir/failure.log"
+
+expect_failure mpirun -np 3 ./bin/bruteforce_mpi_cyclic \
     --input "$test_dir/key5.des" \
     --phrase "esta frase definitivamente no aparece" \
     --max-key 10 \
