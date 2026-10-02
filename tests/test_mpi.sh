@@ -66,12 +66,42 @@ mpirun -np 3 ./bin/bruteforce_mpi_cyclic \
     --check-interval 4 >"$test_dir/cyclic-interval4.log"
 grep -q "Llave: 5" "$test_dir/cyclic-interval4.log"
 
+mpirun -np 4 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key0.des" \
+    --phrase "es una prueba de" \
+    --max-key 2 \
+    --chunk-size 1 >"$test_dir/dynamic-more-workers.log"
+grep -q "Modo: MPI dinamico master-worker" "$test_dir/dynamic-more-workers.log"
+grep -q "Llave: 0" "$test_dir/dynamic-more-workers.log"
+
+mpirun -np 4 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key5.des" \
+    --phrase "es una prueba de" \
+    --max-key 10 \
+    --chunk-size 1 >"$test_dir/dynamic-chunk1.log"
+grep -q "Llave: 5" "$test_dir/dynamic-chunk1.log"
+
+mpirun -np 4 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key5.des" \
+    --phrase "es una prueba de" \
+    --max-key 10 \
+    --chunk-size 4 >"$test_dir/dynamic-chunk4.log"
+grep -q "Llave: 5" "$test_dir/dynamic-chunk4.log"
+
 expect_failure mpirun -np 3 ./bin/bruteforce_mpi \
     --input "$test_dir/key5.des" \
     --phrase "esta frase definitivamente no aparece" \
     --max-key 10 \
     --check-interval 2
 grep -q "llave no encontrada" "$test_dir/failure.log"
+
+expect_failure mpirun -np 4 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key5.des" \
+    --phrase "esta frase definitivamente no aparece" \
+    --max-key 10 \
+    --chunk-size 2
+grep -q "llave no encontrada" "$test_dir/failure.log"
+grep -q "Intentos totales: 10" "$test_dir/failure.log"
 
 expect_failure mpirun -np 3 ./bin/bruteforce_mpi_cyclic \
     --input "$test_dir/key5.des" \
@@ -86,4 +116,16 @@ expect_failure mpirun -np 2 ./bin/bruteforce_mpi \
     --max-key 10 \
     --check-interval " -1"
 
-echo "OK: particiones, intervalos, llave cero y errores MPI."
+expect_failure mpirun -np 2 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key5.des" \
+    --phrase prueba \
+    --max-key 10 \
+    --chunk-size " -1"
+
+expect_failure mpirun -np 1 ./bin/bruteforce_mpi_dynamic \
+    --input "$test_dir/key5.des" \
+    --phrase prueba \
+    --max-key 10 \
+    --chunk-size 2
+
+echo "OK: naive, ciclico, master-worker y errores MPI."
