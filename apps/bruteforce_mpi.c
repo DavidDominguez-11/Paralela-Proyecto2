@@ -302,7 +302,7 @@ int main(int argc, char **argv) {
             "Modo: %s\nProcesos: %d\nArchivo: %s\n"
             "Frase conocida: %s\nRango global: [0, %" PRIu64 ")\n"
             "Intervalo de sincronizacion: %" PRIu64
-            "\nIntentos totales: %" PRIu64 "\nTiempo: %.6f s\n",
+            "\nIntentos totales: %" PRIu64 "\nTiempo: %.9f s\n",
             PROJECT2_MPI_MODE,
             process_count,
             options.input_path,

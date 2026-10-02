@@ -387,7 +387,7 @@ int main(int argc, char **argv) {
             "Modo: MPI dinamico master-worker\nProcesos: %d\nWorkers: %d\n"
             "Archivo: %s\nFrase conocida: %s\nRango global: [0, %" PRIu64 ")\n"
             "Tamano de bloque: %" PRIu64 "\nIntentos totales: %" PRIu64
-            "\nTiempo: %.6f s\n",
+            "\nTiempo: %.9f s\n",
             process_count,
             process_count - 1,
             options.input_path,

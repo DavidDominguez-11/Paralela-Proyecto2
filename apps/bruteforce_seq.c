@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
     printf(
         "Modo: secuencial\nArchivo: %s\nFrase conocida: %s\n"
         "Rango: [%" PRIu64 ", %" PRIu64 ")\nIntentos: %" PRIu64
-        "\nTiempo: %.6f s\n",
+        "\nTiempo: %.9f s\n",
         options.input_path,
         options.phrase,
         options.start_key,
@@ -148,4 +148,3 @@ int main(int argc, char **argv) {
     free(plaintext);
     return EXIT_SUCCESS;
 }
-
