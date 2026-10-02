@@ -73,7 +73,10 @@ Project2Status project2_write_file(
         return PROJECT2_ERR_IO;
     }
 
-    bytes_written = fwrite(data, 1, length, file);
+    bytes_written = 0U;
+    if (length != 0U) {
+        bytes_written = fwrite(data, 1, length, file);
+    }
     close_status = fclose(file);
     if (bytes_written != length || close_status != 0) {
         return PROJECT2_ERR_IO;
