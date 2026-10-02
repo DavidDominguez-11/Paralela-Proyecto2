@@ -10,7 +10,7 @@ COMMON_OBJECTS := $(COMMON_SOURCES:src/%.c=build/%.o)
 PUBLIC_HEADERS := $(wildcard include/project2/*.h)
 
 .PHONY: all core mpi test test-cli test-mpi test-benchmark test-all benchmark \
-	demo demo-mpi clean
+	benchmark-final demo demo-mpi clean
 
 all: core mpi
 
@@ -60,6 +60,13 @@ test-all: test test-cli test-mpi test-benchmark
 
 benchmark: all
 	python3 scripts/benchmark.py --skip-build
+
+benchmark-final: all
+	python3 scripts/benchmark.py --skip-build \
+		--keys 500001,625000,219781 --max-key 1000000 \
+		--processes 2,4 --repetitions 5 --warmups 1 \
+		--check-interval 4096 --chunk-size 4096 \
+		--seed 2026 --output-dir results/final-campaign
 
 demo: core
 	./bin/des_tool encrypt --input data/mensaje.txt --output build/mensaje.des --key 42
