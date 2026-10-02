@@ -15,7 +15,7 @@ all: core mpi
 
 core: bin/des_tool bin/bruteforce_seq
 
-mpi: bin/bruteforce_mpi bin/bruteforce_mpi_cyclic
+mpi: bin/bruteforce_mpi bin/bruteforce_mpi_cyclic bin/bruteforce_mpi_dynamic
 
 bin/des_tool: apps/des_tool.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
 	$(CC) $(CPPFLAGS) $(CFLAGS) apps/des_tool.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
@@ -29,6 +29,10 @@ bin/bruteforce_mpi: apps/bruteforce_mpi.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | 
 bin/bruteforce_mpi_cyclic: apps/bruteforce_mpi.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
 	$(MPICC) $(CPPFLAGS) $(CFLAGS) -DPROJECT2_MPI_CYCLIC \
 		apps/bruteforce_mpi.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
+
+bin/bruteforce_mpi_dynamic: apps/bruteforce_mpi_dynamic.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
+	$(MPICC) $(CPPFLAGS) $(CFLAGS) apps/bruteforce_mpi_dynamic.c \
+		$(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
 bin/test_core: tests/test_core.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
 	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_core.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
@@ -61,6 +65,8 @@ demo-mpi: all demo
 		--phrase "es una prueba de" --max-key 1000 --check-interval 16
 	mpirun -np 4 ./bin/bruteforce_mpi_cyclic --input build/mensaje.des \
 		--phrase "es una prueba de" --max-key 1000 --check-interval 16
+	mpirun -np 4 ./bin/bruteforce_mpi_dynamic --input build/mensaje.des \
+		--phrase "es una prueba de" --max-key 1000 --chunk-size 16
 
 clean:
 	rm -rf build bin
