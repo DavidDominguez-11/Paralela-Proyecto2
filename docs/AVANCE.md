@@ -130,6 +130,8 @@ Estos tiempos no constituyen todavía un benchmark. La entrada es deliberadament
 
 ## 6. Próxima fase
 
-1. Ejecutar la campaña definitiva con repeticiones controladas.
-2. Incorporar las llaves fáciles, medianas y difíciles del enunciado con rangos de prueba viables y claramente documentados.
-3. Analizar los CSV y trasladar las tablas y conclusiones al informe final.
+La campaña definitiva ya se encuentra en `results/final-campaign/` y su análisis en `docs/CAMPANA.md`. La siguiente fase consiste en:
+
+1. Trasladar las tablas y conclusiones al informe final con el formato UVG.
+2. Completar el catálogo de funciones y la explicación de primitivas MPI.
+3. Incorporar diagramas y capturas de evidencia.

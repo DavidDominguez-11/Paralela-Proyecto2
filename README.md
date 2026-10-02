@@ -90,6 +90,12 @@ La campaña predeterminada se ejecuta con:
 make benchmark
 ```
 
+La campaña final reproducible, con las posiciones relativas de llave solicitadas por el enunciado, se ejecuta con:
+
+```bash
+make benchmark-final
+```
+
 Una campaña personalizada puede indicar llaves, rango, procesos, repeticiones y parámetros de sincronización:
 
 ```bash
@@ -188,5 +194,6 @@ En master-worker, `--chunk-size` controla cuántas llaves recibe un worker por s
 ## Documentación del avance
 
 - [Informe del avance](docs/AVANCE.md)
+- [Campaña experimental](docs/CAMPANA.md)
 - [Matriz de trazabilidad](docs/TRAZABILIDAD.md)
 - [Propuesta de mejora](docs/propuesta-mejora-fase0.md)
