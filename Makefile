@@ -9,7 +9,8 @@ COMMON_SOURCES := src/common.c src/file_io.c src/des_crypto.c src/search.c
 COMMON_OBJECTS := $(COMMON_SOURCES:src/%.c=build/%.o)
 PUBLIC_HEADERS := $(wildcard include/project2/*.h)
 
-.PHONY: all core mpi test test-cli test-mpi test-all demo demo-mpi clean
+.PHONY: all core mpi test test-cli test-mpi test-benchmark test-all benchmark \
+	demo demo-mpi clean
 
 all: core mpi
 
@@ -52,7 +53,13 @@ test-cli: core
 test-mpi: all
 	bash tests/test_mpi.sh
 
-test-all: test test-cli test-mpi
+test-benchmark: all
+	bash tests/test_benchmark.sh
+
+test-all: test test-cli test-mpi test-benchmark
+
+benchmark: all
+	python3 scripts/benchmark.py --skip-build
 
 demo: core
 	./bin/des_tool encrypt --input data/mensaje.txt --output build/mensaje.des --key 42
