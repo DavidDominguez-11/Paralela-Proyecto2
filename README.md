@@ -1,6 +1,6 @@
 # Proyecto 2 — Computación Paralela y Distribuida
 
-Implementación modular de una búsqueda de llaves DES por fuerza bruta. El avance actual incluye cifrado y descifrado de archivos, búsqueda secuencial y búsquedas paralelas naive y cíclica con Open MPI.
+Implementación modular de una búsqueda de llaves DES por fuerza bruta. Incluye cifrado y descifrado de archivos, búsqueda secuencial y tres estrategias con Open MPI: naive, cíclica y dinámica master-worker.
 
 DES se utiliza porque es un requisito académico del proyecto. No debe utilizarse para proteger información real.
 
@@ -11,8 +11,8 @@ DES se utiliza porque es un requisito académico del proyecto. No debe utilizars
 - Búsqueda secuencial por rango: funcional.
 - Búsqueda MPI naive con bloques contiguos: funcional.
 - Búsqueda MPI con distribución cíclica: funcional.
+- Búsqueda MPI dinámica master-worker: funcional.
 - Prueba automatizada del núcleo: funcional.
-- Distribución dinámica master-worker: pendiente para la siguiente fase.
 - Campaña completa de mediciones y speedup: pendiente.
 
 El archivo `bruteforce.c` de la raíz se conserva únicamente como referencia proporcionada por el curso. No forma parte de la compilación.
@@ -24,7 +24,8 @@ include/project2/       Interfaces públicas
 src/                    Implementación reutilizable
 apps/des_tool.c         Cifrado y descifrado de archivos
 apps/bruteforce_seq.c   Búsqueda secuencial
-apps/bruteforce_mpi.c   Búsquedas MPI naive y cíclica
+apps/bruteforce_mpi.c           Búsquedas MPI naive y cíclica
+apps/bruteforce_mpi_dynamic.c   Búsqueda dinámica master-worker
 tests/test_core.c       Pruebas del núcleo
 data/mensaje.txt        Entrada reproducible de demostración
 docs/                   Enunciado, decisiones y trazabilidad
@@ -55,6 +56,7 @@ Los ejecutables se generan en `bin/`:
 - `bruteforce_seq`
 - `bruteforce_mpi`
 - `bruteforce_mpi_cyclic`
+- `bruteforce_mpi_dynamic`
 - `test_core`, después de ejecutar `make test`
 
 ## Pruebas
@@ -139,7 +141,18 @@ mpirun -np 4 ./bin/bruteforce_mpi_cyclic \
   --check-interval 16
 ```
 
+Buscarla con asignación dinámica de bloques:
+
+```bash
+mpirun -np 4 ./bin/bruteforce_mpi_dynamic \
+  --input build/mensaje.des \
+  --phrase "es una prueba de" \
+  --max-key 1000 \
+  --chunk-size 16
+```
+
 `--max-key` es exclusivo. El ejemplo anterior recorre desde 0 hasta 999. La opción `--check-interval` controla cuántas llaves procesa cada proceso entre sincronizaciones colectivas.
+En master-worker, `--chunk-size` controla cuántas llaves recibe un worker por solicitud. El proceso 0 coordina y los procesos restantes ejecutan la búsqueda.
 
 ## Documentación del avance
 

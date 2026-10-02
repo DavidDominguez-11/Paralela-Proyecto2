@@ -15,12 +15,13 @@ archivo de texto
     -> recuperación del texto original
 ```
 
-Se generan cuatro ejecutables:
+Se generan cinco ejecutables:
 
 - `des_tool`: cifra y descifra archivos.
 - `bruteforce_seq`: busca una llave dentro de un rango secuencial.
 - `bruteforce_mpi`: divide el rango en bloques contiguos y lo busca con Open MPI.
 - `bruteforce_mpi_cyclic`: intercala las llaves entre los procesos MPI.
+- `bruteforce_mpi_dynamic`: asigna bloques bajo demanda con un coordinador master.
 
 ## 2. Decisiones técnicas
 
@@ -54,6 +55,10 @@ Las versiones naive y cíclica comparten el mismo protocolo de terminación. Cad
 
 El intervalo de sincronización es configurable. Un intervalo pequeño reacciona antes al hallazgo, pero aumenta la comunicación; uno grande reduce comunicación, pero puede ejecutar más intentos innecesarios.
 
+### Distribución dinámica
+
+En master-worker, el proceso 0 entrega bloques `[inicio, fin)` a los demás procesos conforme los solicitan. El tamaño se configura con `--chunk-size`. Cuando un worker encuentra la llave o reporta un error, el master entra en estado de parada y responde `STOP` a cada worker al terminar su bloque actual. Esto evita asignaciones duplicadas y acota el trabajo descartado al tamaño de los bloques que ya estaban en ejecución.
+
 ## 3. Evidencia reproducible
 
 Entorno utilizado:
@@ -74,7 +79,7 @@ Resultado esperado:
 ```text
 OK: parser, archivos, DES, padding y busqueda secuencial.
 OK: comandos, llaves limite y resultados de error.
-OK: particiones, intervalos, llave cero y errores MPI.
+OK: naive, ciclico, master-worker y errores MPI.
 ```
 
 La demostración completa se ejecuta con:
@@ -96,9 +101,10 @@ Resultados observados:
 
 | Versión | Resultado | Llave | Intentos | Tiempo observado |
 |---|---|---:|---:|---:|
-| Secuencial | Encontrada | 42 | 43 | 0.000034 s |
-| MPI naive | Encontrada | 42 | 187 totales | 0.000092 s |
-| MPI cíclico | Encontrada | 42 | 59 totales | 0.000043 s |
+| Secuencial | Encontrada | 42 | 43 | 0.000036 s |
+| MPI naive | Encontrada | 42 | 187 totales | 0.000165 s |
+| MPI cíclico | Encontrada | 42 | 59 totales | 0.000028 s |
+| MPI dinámico, bloque 16 | Encontrada | 42 | 59 totales | 0.000034 s |
 
 Estos tiempos no constituyen todavía un benchmark. La entrada es deliberadamente pequeña para demostrar corrección. En este caso MPI es más lento porque el costo de sincronización es mayor que el trabajo criptográfico realizado.
 
@@ -110,19 +116,19 @@ Estos tiempos no constituyen todavía un benchmark. La entrada es deliberadament
 - La búsqueda secuencial encuentra una llave conocida y registra intentos y tiempo.
 - Cuatro procesos MPI pueden compartir la entrada, buscar en rangos diferentes y terminar coordinadamente.
 - La distribución cíclica cubre el rango sin duplicar candidatos y reduce la dependencia entre el valor de la llave y un bloque contiguo.
+- El master-worker asigna bloques sin repetirlos y termina coordinadamente tanto con una solución como al agotar el rango.
 - Los errores de argumentos y archivos producen una terminación controlada.
 
 ## 5. Limitaciones conocidas
 
 - DES y ECB son inseguros para aplicaciones reales; se usan únicamente por requerimiento académico.
 - La API DES de OpenSSL 3 está obsoleta. El aislamiento en `des_crypto.c` permite reemplazarla posteriormente.
-- El enfoque dinámico master-worker todavía no está implementado.
+- En master-worker, el proceso 0 se dedica exclusivamente a coordinar; con `-np 4` existen tres workers de búsqueda.
 - Las mediciones pequeñas reflejan principalmente overhead y no deben interpretarse como speedup definitivo.
 - Todavía no se ha ejecutado el espacio completo de `2^56`, porque no es viable como prueba de avance.
 
 ## 6. Próxima fase
 
-1. Implementar master-worker con bloques dinámicos.
-2. Agregar una bitácora automatizada en CSV para cada ejecución.
-3. Ejecutar repeticiones controladas y calcular mediana, speedup y eficiencia.
-4. Incorporar las llaves fáciles, medianas y difíciles del enunciado con rangos de prueba viables y claramente documentados.
+1. Agregar una bitácora automatizada en CSV para cada ejecución.
+2. Ejecutar repeticiones controladas y calcular mediana, speedup y eficiencia.
+3. Incorporar las llaves fáciles, medianas y difíciles del enunciado con rangos de prueba viables y claramente documentados.
