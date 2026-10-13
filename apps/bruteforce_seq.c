@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
     unsigned char *plaintext = NULL;
     size_t ciphertext_length = 0;
     size_t plaintext_length = 0;
-    Project2SearchResult result;
+    Project2SearchResult result = {0};
     Project2Status status;
 
     if (!parse_arguments(argc, argv, &options)) {
@@ -94,6 +94,14 @@ int main(int argc, char **argv) {
         &result
     );
 
+    /* Only a completed search (found or exhausted) has reportable metrics. */
+    if (status != PROJECT2_OK && status != PROJECT2_ERR_NOT_FOUND) {
+        fprintf(stderr, "La busqueda fallo: %s.\n",
+                project2_status_message(status));
+        free(ciphertext);
+        return EXIT_FAILURE;
+    }
+
     printf(
         "Modo: secuencial\nArchivo: %s\nFrase conocida: %s\n"
         "Rango: [%" PRIu64 ", %" PRIu64 ")\nIntentos: %" PRIu64
@@ -108,12 +116,6 @@ int main(int argc, char **argv) {
 
     if (status == PROJECT2_ERR_NOT_FOUND) {
         printf("Resultado: llave no encontrada\n");
-        free(ciphertext);
-        return EXIT_FAILURE;
-    }
-    if (status != PROJECT2_OK) {
-        fprintf(stderr, "La busqueda fallo: %s.\n",
-                project2_status_message(status));
         free(ciphertext);
         return EXIT_FAILURE;
     }

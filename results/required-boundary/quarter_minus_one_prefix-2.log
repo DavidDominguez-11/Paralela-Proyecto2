@@ -1,0 +1,22 @@
+$ mpirun -np 4 /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/bin/bruteforce_mpi --input /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481983.des --phrase 'es una prueba de' --max-key 1000000 --check-interval 4096
+Modo: MPI naive
+Procesos: 4
+Archivo: /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481983.des
+Frase conocida: es una prueba de
+Rango global: [0, 1000000)
+Intervalo de sincronizacion: 4096
+Intentos totales: 1000000
+Tiempo: 0.165618548 s
+Resultado: llave no encontrada
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[41065,1],1]
+  Exit code:    1
+--------------------------------------------------------------------------
+[return_code=1]

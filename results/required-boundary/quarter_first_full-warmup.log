@@ -1,0 +1,15 @@
+$ mpirun -np 4 /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/bin/bruteforce_mpi --input /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481984.des --phrase 'es una prueba de' --max-key 72057594037927936 --check-interval 4096
+Modo: MPI naive
+Procesos: 4
+Archivo: /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481984.des
+Frase conocida: es una prueba de
+Rango global: [0, 72057594037927936)
+Intervalo de sincronizacion: 4096
+Intentos totales: 12289
+Tiempo: 0.002192328 s
+Resultado: llave encontrada
+Llave: 18014398509481984
+Texto: Esta es una prueba de proyecto 2
+
+
+[return_code=0]

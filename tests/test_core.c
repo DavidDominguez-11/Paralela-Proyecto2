@@ -122,6 +122,27 @@ static void test_des_limits_and_padding(void) {
     free(ciphertext);
 }
 
+static void test_des_known_answer(void) {
+    /* NIST SP 800-17, Appendix B, Table 1: DES ECB variable-plaintext KAT.
+       The 56-bit numeric key 0 expands to DES key 0101010101010101. */
+    static const unsigned char plaintext[8] = {
+        0x80U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U, 0x00U
+    };
+    static const unsigned char expected_block[8] = {
+        0x95U, 0xf8U, 0xa5U, 0xe5U, 0xddU, 0x31U, 0xd9U, 0x00U
+    };
+    unsigned char *ciphertext = NULL;
+    size_t ciphertext_length = 0U;
+
+    assert(project2_des_encrypt(
+        0U, plaintext, sizeof(plaintext), &ciphertext, &ciphertext_length
+    ) == PROJECT2_OK);
+    /* The API adds a second block of PKCS#7 padding; the first is the KAT. */
+    assert(ciphertext_length == 16U);
+    assert(memcmp(ciphertext, expected_block, sizeof(expected_block)) == 0);
+    free(ciphertext);
+}
+
 static void test_binary_search(void) {
     static const unsigned char buffer[] = {'A', 0U, 'B', 'C', 0U, 'D'};
     static const unsigned char present[] = {'B', 'C', 0U};
@@ -309,6 +330,22 @@ static void test_search(void) {
         1,
         &result
     ) == PROJECT2_ERR_ARGUMENT);
+
+    result.found = true;
+    result.key = 99U;
+    result.attempts = 99U;
+    result.elapsed_seconds = 99.0;
+    assert(project2_search_range(
+        ciphertext, 0U, phrase, sizeof(phrase) - 1U,
+        0U, 100U, 1U, &result
+    ) == PROJECT2_ERR_ARGUMENT);
+    assert(!result.found && result.key == 0U);
+    assert(result.attempts == 0U && result.elapsed_seconds == 0.0);
+    assert(project2_search_range(
+        ciphertext, ciphertext_length - 1U, phrase, sizeof(phrase) - 1U,
+        0U, 100U, 1U, &result
+    ) == PROJECT2_ERR_ARGUMENT);
+    assert(result.attempts == 0U && result.elapsed_seconds == 0.0);
     assert(project2_search_range(
         ciphertext,
         ciphertext_length,
@@ -327,6 +364,7 @@ static void test_search(void) {
 int main(void) {
     test_parse_u64();
     test_des_limits_and_padding();
+    test_des_known_answer();
     test_binary_search();
     test_file_io();
     test_search();

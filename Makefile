@@ -9,7 +9,7 @@ COMMON_SOURCES := src/common.c src/file_io.c src/des_crypto.c src/search.c
 COMMON_OBJECTS := $(COMMON_SOURCES:src/%.c=build/%.o)
 PUBLIC_HEADERS := $(wildcard include/project2/*.h)
 
-.PHONY: all core mpi test test-cli test-mpi test-benchmark test-all benchmark \
+.PHONY: all core mpi test test-cli test-mpi test-benchmark test-all test-sanitize benchmark \
 	benchmark-final demo demo-mpi clean
 
 all: core mpi
@@ -38,6 +38,12 @@ bin/bruteforce_mpi_dynamic: apps/bruteforce_mpi_dynamic.c $(COMMON_OBJECTS) $(PU
 bin/test_core: tests/test_core.c $(COMMON_OBJECTS) $(PUBLIC_HEADERS) | bin
 	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_core.c $(COMMON_OBJECTS) -o $@ $(LDLIBS)
 
+bin/test_core_san: tests/test_core.c $(COMMON_SOURCES) $(PUBLIC_HEADERS) | bin
+	$(CC) $(CPPFLAGS) -std=c11 -O1 -g -Wall -Wextra -Wpedantic \
+		-Wno-deprecated-declarations -fsanitize=address,undefined \
+		-fno-omit-frame-pointer tests/test_core.c $(COMMON_SOURCES) \
+		-o $@ $(LDLIBS)
+
 build/%.o: src/%.c $(PUBLIC_HEADERS) | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
@@ -57,6 +63,9 @@ test-benchmark: all
 	bash tests/test_benchmark.sh
 
 test-all: test test-cli test-mpi test-benchmark
+
+test-sanitize: bin/test_core_san
+	ASAN_OPTIONS=detect_leaks=1 ./bin/test_core_san
 
 benchmark: all
 	python3 scripts/benchmark.py --skip-build

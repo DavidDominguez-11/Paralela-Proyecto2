@@ -1,0 +1,5 @@
+$ /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/bin/des_tool encrypt --input /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/data/mensaje.txt --output /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481983.des --key 18014398509481983
+Operacion: encrypt
+Llave: 18014398509481983
+Entrada: /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/data/mensaje.txt (34 bytes)
+Salida: /mnt/c/Users/David/Documents/2026/S2/PARALELA/Proyecto2/results/required-boundary/key-18014398509481983.des (40 bytes)

@@ -4,3 +4,5 @@ bin/
 *.dec.txt
 __pycache__/
 *.pyc
+
+EJEMPLOS/

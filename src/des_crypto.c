@@ -11,6 +11,7 @@ static bool key_is_valid(uint64_t key) {
 static void expand_key(uint64_t key, DES_cblock *block) {
     size_t index;
 
+    /* DES uses seven effective bits plus one parity bit per key byte. */
     for (index = 0; index < PROJECT2_DES_BLOCK_SIZE; ++index) {
         unsigned int shift = (unsigned int)((7U - index) * 7U);
         (*block)[index] = (unsigned char)(((key >> shift) & UINT64_C(0x7f)) << 1U);
@@ -50,6 +51,7 @@ Project2Status project2_des_encrypt(
 
     *ciphertext = NULL;
     *ciphertext_length = 0;
+    /* PKCS#7 always adds padding, including a whole block to aligned input. */
     padding = PROJECT2_DES_BLOCK_SIZE -
               (plaintext_length % PROJECT2_DES_BLOCK_SIZE);
     padded_length = plaintext_length + padding;

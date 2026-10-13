@@ -1,0 +1,3 @@
+case,target_key,max_key,samples,median_attempts,median_search_seconds,median_wall_seconds,status
+quarter_minus_one_prefix,18014398509481983,1000000,5,1000000,0.165618548,1.552298223,not_found_in_prefix
+quarter_first_full,18014398509481984,72057594037927936,5,12289,0.002423341,0.398726026,found

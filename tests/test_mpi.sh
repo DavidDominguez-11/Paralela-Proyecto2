@@ -128,4 +128,17 @@ expect_failure mpirun -np 1 ./bin/bruteforce_mpi_dynamic \
     --max-key 10 \
     --chunk-size 2
 
+printf '\001\002\003' >"$test_dir/short.des"
+for program in bruteforce_mpi bruteforce_mpi_cyclic bruteforce_mpi_dynamic; do
+    expect_failure mpirun -np 3 "./bin/$program" \
+        --input "$test_dir/short.des" \
+        --phrase prueba \
+        --max-key 10
+    grep -q "No se pudo preparar la entrada MPI" "$test_dir/failure.log"
+    if grep -q '^Intentos totales:' "$test_dir/failure.log"; then
+        echo "ERROR: se imprimieron metricas de un cifrado MPI invalido" >&2
+        exit 1
+    fi
+done
+
 echo "OK: naive, ciclico, master-worker y errores MPI."

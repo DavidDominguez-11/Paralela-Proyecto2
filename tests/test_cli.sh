@@ -60,4 +60,18 @@ expect_failure ./bin/bruteforce_seq \
     --start-key 10 \
     --max-key 10
 
+: >"$test_dir/empty.des"
+printf '\001\002\003' >"$test_dir/short.des"
+for malformed in empty short; do
+    expect_failure ./bin/bruteforce_seq \
+        --input "$test_dir/$malformed.des" \
+        --phrase prueba \
+        --max-key 8
+    grep -q "La busqueda fallo: argumento invalido" "$test_dir/failure.log"
+    if grep -Eq '^(Intentos|Tiempo):' "$test_dir/failure.log"; then
+        echo "ERROR: se imprimieron metricas para un cifrado invalido" >&2
+        exit 1
+    fi
+done
+
 echo "OK: comandos, llaves limite y resultados de error."

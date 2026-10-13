@@ -1,4 +1,8 @@
-# Avance de implementación
+# Avance de implementación (registro histórico del 2 de octubre de 2026)
+
+El estado actualizado y las nuevas mediciones se encuentran en
+`docs/CASOS_LITERAL.md` y `docs/EVIDENCIA.md`. Las tareas pendientes que aparecen
+al final de este registro describen el estado de aquella fecha.
 
 Fecha de validación: 2 de octubre de 2026.
 

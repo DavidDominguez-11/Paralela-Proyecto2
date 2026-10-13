@@ -82,6 +82,7 @@ static void run_master(
     uint64_t *global_key,
     int *valid
 ) {
+    /* A worker receives STOP only in response to a request or a report. */
     uint64_t next_key = 0U;
     int stopped_workers = 0;
 
@@ -168,6 +169,7 @@ static void run_worker(
     unsigned char *work_buffer,
     uint64_t *local_attempts
 ) {
+    /* Each assignment is a disjoint half-open range owned by this worker. */
     bool running = true;
 
     while (running) {
@@ -269,7 +271,9 @@ int main(int argc, char **argv) {
         valid = process_count >= 2 && parse_arguments(argc, argv, &options) ? 1 : 0;
         if (valid) {
             status = project2_read_file(options.input_path, &ciphertext, &file_length);
-            valid = status == PROJECT2_OK && file_length <= INT_MAX &&
+            valid = status == PROJECT2_OK && file_length > 0U &&
+                    file_length % PROJECT2_DES_BLOCK_SIZE == 0U &&
+                    file_length <= INT_MAX &&
                     strlen(options.phrase) <= INT_MAX;
             if (!valid) {
                 fprintf(stderr, "No se pudo preparar la entrada MPI.\n");

@@ -1,5 +1,10 @@
 # Campaña experimental
 
+Este documento analiza la campaña histórica del 2 de octubre de 2026.
+Los casos literales añadidos el 13 de octubre están documentados por separado
+en [CASOS_LITERAL.md](CASOS_LITERAL.md). Ninguna de las 105 filas históricas se
+sobrescribió.
+
 ## Diseño
 
 El espacio DES completo contiene `2^56` candidatos y no es viable para una campaña académica repetida en el hardware disponible. Para conservar el fenómeno descrito en el enunciado se utiliza un rango reducido de tamaño:
@@ -54,6 +59,13 @@ speedup = mediana_secuencial / mediana_paralela
 La eficiencia principal divide el speedup entre todos los procesos MPI. También se informa eficiencia por worker, porque el proceso 0 de master-worker se dedica exclusivamente a coordinar.
 
 Los resultados deben interpretarse junto con el número de intentos. Un speedup alto puede provenir de que una distribución encontró la llave tras explorar menos candidatos, no necesariamente de una mayor tasa criptográfica.
+
+Los tiempos corresponden a la región de búsqueda, no al tiempo total del
+programa. Las tres posiciones de llave fueron elegidas para contrastar
+escenarios; no estiman por sí solas el tiempo paralelo esperado de una llave
+uniforme en `2^56` ni el rendimiento de un clúster físico. Las filas históricas
+registran `git_revision=ec5c495` y `git_dirty=yes`, de modo que no se atribuyen
+a un árbol de trabajo limpio reconstruible solo desde ese commit.
 
 ## Resultados
 

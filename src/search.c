@@ -88,16 +88,22 @@ Project2Status project2_search_range(
     uint64_t key;
     double start_time;
 
-    if (ciphertext == NULL || ciphertext_length == 0U || known_phrase == NULL ||
-        known_phrase_length == 0U || result == NULL || stride == 0U ||
-        start_key > end_key || end_key > PROJECT2_DES_KEYSPACE) {
+    if (result == NULL) {
         return PROJECT2_ERR_ARGUMENT;
     }
 
+    /* Leave a defined result even when validation or allocation fails. */
     result->found = false;
     result->key = 0;
     result->attempts = 0;
     result->elapsed_seconds = 0.0;
+
+    if (ciphertext == NULL || ciphertext_length == 0U ||
+        ciphertext_length % PROJECT2_DES_BLOCK_SIZE != 0U ||
+        known_phrase == NULL || known_phrase_length == 0U || stride == 0U ||
+        start_key > end_key || end_key > PROJECT2_DES_KEYSPACE) {
+        return PROJECT2_ERR_ARGUMENT;
+    }
 
     work_buffer = malloc(ciphertext_length + 1U);
     if (work_buffer == NULL) {

@@ -28,6 +28,7 @@ Project2Status project2_try_key(
     bool *matches
 );
 
+/* A non-NULL result is initialized even if the input is rejected. */
 Project2Status project2_search_range(
     const unsigned char *ciphertext,
     size_t ciphertext_length,

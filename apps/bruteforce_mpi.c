@@ -75,6 +75,7 @@ static void partition_range(
     uint64_t *start,
     uint64_t *end
 ) {
+    /* Give the first remainder ranks one extra key; ranges stay disjoint. */
     uint64_t count = (uint64_t)process_count;
     uint64_t rank_u64 = (uint64_t)rank;
     uint64_t quotient = total / count;
@@ -124,7 +125,9 @@ int main(int argc, char **argv) {
                 &ciphertext,
                 &file_length
             );
-            valid = status == PROJECT2_OK && file_length <= INT_MAX &&
+            valid = status == PROJECT2_OK && file_length > 0U &&
+                    file_length % PROJECT2_DES_BLOCK_SIZE == 0U &&
+                    file_length <= INT_MAX &&
                     strlen(options.phrase) <= INT_MAX;
             if (!valid) {
                 fprintf(stderr, "No se pudo preparar la entrada MPI.\n");
@@ -204,6 +207,7 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
     start_time = MPI_Wtime();
 
+    /* Every rank enters the collectives in the same order after each batch. */
     while (global_key == UINT64_MAX) {
         uint64_t local_key = UINT64_MAX;
         uint64_t processed = 0;
